@@ -9,7 +9,7 @@ export default {
       yield put({ type: "products/addCart", payload });
       yield put({ type: "saveItem", payload });
     },
-    *setStorage({},{ put }){
+    *setStorage({payload},{put }){
       yield put ({
         type:"storageData",
         cdata:{
@@ -17,7 +17,7 @@ export default {
         }
       })
     },
-    *settlementData({},{put}){
+    *settlementData({payload},{put}){
       yield put({type:"settlement"})
     },
     *decreaseNum({ payload },{put}) {
@@ -69,14 +69,17 @@ export default {
     },
     removeGood(state, { payload }) {
       const {data} = state
+      data[payload.index].product.installments += payload.quantity
       data.splice(payload.index, 1);
+      console.log(data);
+      
       
       const storage = window.localStorage
       let _data = JSON.stringify(data)
       storage.setItem("data",_data)
-      console.log(_data,'remove');
-
-      return { data: [...data] };
+      return { 
+        ...state,
+        data: [...data] };
     },
     increment(state, { payload }) {
       const { data } = state;
@@ -88,12 +91,10 @@ export default {
       } else {
         data[index].quantity += payload.key;
         data[index].product.installments -= payload.key;
-        console.log(data[index].quantity);
       }
       const storage = window.localStorage
       let _data = JSON.stringify(data)
       storage.setItem("data",_data)
-      console.log(_data,'increase');
 
       return { data: [...data] };
     },
@@ -107,7 +108,6 @@ export default {
       const storage = window.localStorage
       let _data = JSON.stringify(data)
       storage.setItem("data",_data)
-      console.log(_data,'settlement');
 
       return{
         ...state,

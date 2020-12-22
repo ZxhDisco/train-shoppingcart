@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from "react";
-import { Drawer, List, Image } from "antd";
+import { Drawer, List, Image, message } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import "../App.css";
 import 'antd/dist/antd.css';
@@ -8,6 +8,7 @@ import { connect } from "dva";
 
 const Cart = ({ cart, dispatch }) => {
   const [visible, setVisible] = useState(false);
+  const [check, setCheck] = useState(true)
   const showDrawer = () => {
     setVisible(true);
   };
@@ -53,10 +54,20 @@ const Cart = ({ cart, dispatch }) => {
               <span className="totalNum">$ {total}</span>
               <br />
               <button
-                onClick={() =>
-                  dispatch({
-                    type: "cart/checkout",
-                  })
+                onClick={() => {
+                  if(check){
+                    message.warn(`合计${total},再次点击即可结算`)
+                    setCheck(false)
+                    return
+                  }else {
+                    dispatch({
+                      type: "cart/checkout",
+                    })
+                    setCheck(true)
+                  }
+                   
+                }
+                  
                 }
                 disabled={cart.length === 0}
                 className="checkBtn"
@@ -77,7 +88,7 @@ const Cart = ({ cart, dispatch }) => {
                 itemLayout="horizontal"
                 dataSource={cart}
                 renderItem={(item, index) => (
-                  <List.Item>
+                  <List.Item key={item.sku}>
                     <Image
                       src={`./img/${item.product.sku}_1.jpg`}
                       className="cartImg"
@@ -99,6 +110,7 @@ const Cart = ({ cart, dispatch }) => {
                             type: "cart/removeCart",
                             payload: {
                               index: index,
+                              quantity:item.quantity
                             },
                           });
                         }}

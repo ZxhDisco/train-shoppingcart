@@ -1,30 +1,48 @@
 import * as api from "../api/index";
+import {message} from 'antd'
 
 export default {
   namespace: "products",
   state: {
     data: [],
+    shopData:[]
   },
   effects: {
-    *fetch({ payload: {} }, { call, put }) {
-      const data = yield call(api.getProducts, {});
-      yield put({ type: "save", payload: { data } });
-    },
-    *sortDatas({ payload: { product, key } }, { put }) {
-      let newData = [];
-      if (key === "asc") {
-        newData = product.sort((a, b) => a["price"] - b["price"]);
-      } else if (key === "desc") {
-        newData = product.sort((a, b) => b["price"] - a["price"]);
-      } else {    
-       // product.map((item) => console.log(item["price"]))
-        // newData = product.filter((item) => {
-        //   return item.availableSizes.includes("XL")
-        // });
-        // console.log(newData);
-  
-        newData = product.sort((a, b) => a["id"] - b["id"]);
+    *fetch({ payload }, { call, put }) {
+      const res = yield call(api.getProducts);
+      console.log(res);
+      if(res){
+        yield put({ type: "saveData", payload: {res} });
+        yield put({ type: "saveShopdata", payload: {res} });
+      }else{
+        message.error("未找到数据")
       }
+      
+
+    },
+    *sortDatas({ payload: { product, key,bol } }, { put }) {
+      let newData = [];
+      if(bol){
+        if(key) {
+          product.forEach(item => {
+            for(let i = 0;i < item.availableSizes.length;i++){
+              if(item.availableSizes[i] === key){
+                newData.push(item)
+              }
+            }
+          })
+        }
+      }else{
+        if (key === "asc") {
+          newData = product.sort((a, b) => a["price"] - b["price"]);
+        } else if (key === "desc") {
+          newData = product.sort((a, b) => b["price"] - a["price"]);
+        }
+        else {    
+          newData = product.sort((a, b) => a["id"] - b["id"]);
+        }
+      }
+      
       yield put({
         type: "setData",
         data: [...newData],
@@ -32,9 +50,20 @@ export default {
     },
   },
   reducers: {
-    save(state, { payload }) {
+    saveData(state, payload ) {
+      console.log(payload,'12323');
+      
+      const {res} = payload.payload
       return {
-        data: payload.data,
+        ...state,
+        data: res,
+      };
+    },
+    saveShopdata(state, payload ) {
+      const {res} = payload.payload
+      return {
+        ...state,
+        shopData: res,
       };
     },
     addOne(state,{payload}){
