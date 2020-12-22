@@ -1,25 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Row } from "antd";
+import 'antd/dist/antd.css';
+import Cart from "./components/Cart";
+import Contents from "./components/Content";
 
-function App() {
+
+
+function IndexPage() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Cart />
+      <Row type="flex" justify="space-around" style={{ margin: "90px 45px 0" }}>
+        <Contents />
+      </Row>
+    </>
   );
 }
 
-export default App;
+export default IndexPage;
