@@ -1,10 +1,7 @@
-import React, { useEffect, Fragment,useState } from "react";
-import { Card, Popover, Button, Col, List, message, Spin, Space } from "antd";
-import Header from "./Header";
+import React, { useEffect,useState } from "react";
+import { Card, Popover, Button, Col, List, message, Spin, Row } from "antd";
 import "../App.css";
 import { connect } from "dva";
-import {SyncOutlined} from "@ant-design/icons"
-import cart from "../models/cart";
 
 
 const { Meta } = Card;
@@ -46,11 +43,11 @@ const Products = ({ dispatch, products,cartData }) => {
         <Card
           hoverable
           cover={<img alt="ex" src={`./img/${item.sku}_1.jpg`} />}
-          style={{ textAlign: "center" }}
+          style={{ textAlign: "center",position:"relative" }}
         >
-          {item.isFreeShipping?<div style={{position:'relative'}}>
+          {item.isFreeShipping?
             <span className="freeShip">Free Shipping</span>
-          </div>:''}
+          :''}
           <Meta title={item.title} />
           <span className="contentLine">————</span>
           <br />
@@ -114,15 +111,14 @@ const Products = ({ dispatch, products,cartData }) => {
   
 
   return (
-    <Fragment>
-      <Header />
+    <Row type="flex" justify="space-around" style={{ margin: "20px 45px 0" }}>
      {
       load ? 
       (  <div className='loading'>
           <Spin size="large" />
          </div>) : shopList  
     } 
-    </Fragment>
+    </Row>
   );
 };
 

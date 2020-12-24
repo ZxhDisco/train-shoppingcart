@@ -30,8 +30,8 @@
 
 .freeShip {
   position: absolute;
-  bottom: 400px;
-  right: -25px;
+  top: 8px;
+  right: 5px;
   background-color: #000;
   color: #fff;
   border-radius: 2px;
@@ -56,6 +56,7 @@
   color: #fff;
   border: none;
   border-radius: 5px;
+  z-index: 1;
 }
 
 .ant-drawer-title {
@@ -179,16 +180,11 @@
 }
 
 .headerLeft {
-  position: fixed;
-  top: 55px;
-  left: 110px;
+  
+  /* margin-left: 1px; */
+  line-height: 45px;
 }
 
-.headerRight {
-  position: fixed;
-  top: 55px;
-  right: 80px;
-}
 .loading {
   position: fixed;
    top:50%;

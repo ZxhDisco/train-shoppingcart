@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "dva";
-import { Menu } from "antd";
+import { Menu, Row, Col  } from "antd";
 import { ProjectOutlined } from "@ant-design/icons";
 import  "../App.css";
 
@@ -30,12 +30,12 @@ const Header = ({ dispatch, products,staticData }) => {
     })
   }
   return (
-    <div className="header">
-      <span className="headerLeft">
+    <Row  type="flex"   className="header">
+      <Col xs={22} sm={6} md={8} lg={15} className="headerLeft">
         <span style={{color:"red",fontWeight:"500"}}>{products.length}</span> Products found
-        </span>
+        </Col>
 
-      <span className="headerRight">
+      <Col xs={22} sm={10} md={10} lg={8}  className="headerRight">
         <Menu theme="light" mode="horizontal">
           <SubMenu 
             title="Specified Size"
@@ -59,8 +59,8 @@ const Header = ({ dispatch, products,staticData }) => {
             </Menu.Item>
           </SubMenu>
         </Menu>
-      </span>
-    </div>
+      </Col>
+    </Row>
   );
 };
 
