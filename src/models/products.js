@@ -10,7 +10,6 @@ export default {
   effects: {
     *fetch({ payload }, { call, put }) {
       const res = yield call(api.getProducts);
-      console.log(res);
       if(res){
         yield put({ type: "saveData", payload: {res} });
         yield put({ type: "saveShopdata", payload: {res} });
@@ -39,7 +38,7 @@ export default {
           newData = product.sort((a, b) => b["price"] - a["price"]);
         }
         else {    
-          newData = product.sort((a, b) => a["id"] - b["id"]);
+          yield put({ type: "fetch" });
         }
       }
       
@@ -50,17 +49,15 @@ export default {
     },
   },
   reducers: {
-    saveData(state, payload ) {
-      console.log(payload,'12323');
-      
-      const {res} = payload.payload
+    saveData(state, payload ) {      
+      const { res } = payload.payload
       return {
         ...state,
         data: res,
       };
     },
     saveShopdata(state, payload ) {
-      const {res} = payload.payload
+      const { res } = payload.payload
       return {
         ...state,
         shopData: res,

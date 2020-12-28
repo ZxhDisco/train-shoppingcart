@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from "react";
-import { Drawer, List, Image, message } from "antd";
+import { Drawer, List, Image, message, Row, Col } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import "../App.css";
 import 'antd/dist/antd.css';
@@ -9,6 +9,12 @@ import { connect } from "dva";
 const Cart = ({ cart, dispatch }) => {
   const [visible, setVisible] = useState(false);
   const [check, setCheck] = useState(true)
+  const [resize, setReSize] =useState(1000)
+  
+  const total = cart
+    .reduce((total, item) => total + item.product.price * item.quantity, 0)
+    .toFixed(2);
+
   const showDrawer = () => {
     setVisible(true);
   };
@@ -16,38 +22,44 @@ const Cart = ({ cart, dispatch }) => {
     setVisible(false);
   };
 
-  const total = cart
-    .reduce((total, item) => total + item.product.price * item.quantity, 0)
-    .toFixed(2);
+  useEffect(() => {
+    window.addEventListener('resize',function(){
+      setReSize(document.documentElement.clientWidth);
+    })
+  }, [document.documentElement.clientWidth])
 
-    useEffect(()=> {
-      if(window.localStorage.data){
-        dispatch({type:"cart/setStorage"})
-      }
-    },[])
+  useEffect(()=> {
+    if(window.localStorage.data){
+      dispatch({type:"cart/setStorage"})
+    }
+  },[])
+
   return (
     <>
       <button className="cartBtn" onClick={showDrawer}>
         <ShoppingCartOutlined /><span className="showCount">{cart.length}</span>
       </button>
-      <div className="cartDiv">
+      <div >
         <Drawer
           title={
-            <div>
-              <div className={visible ? "countCart" : ""}>
-                {cart.length}
-              </div>
-              <span className="titleCart">
+            <div >
+              <div className="iconCart">
                 <ShoppingCartOutlined />
+                <div className={visible ? "countCart" : ""}>
+                  {cart.length}
+                </div>
+              </div>
+              
+              <div className="titleCart">
                 Cart
-              </span>
+              </div>
             </div>
           }
           placement="right"
           closable={false}
           onClose={onClose}
           visible={visible}
-          width={"35%"}
+          width={resize>850 ? '35%':'75%'}
           footer={
             <div style={{ height: "100px", position: "relative" }}>
               <span className="totalTitle">Total: </span>
@@ -83,17 +95,18 @@ const Cart = ({ cart, dispatch }) => {
           {cart.length === 0 ? (
             <h1 style={{ color: "#fff" }}>Your Shopping-Cart is empty!</h1>
           ) : (
-            <div>
+            <Row>
               <List
                 itemLayout="horizontal"
                 dataSource={cart}
-                renderItem={(item, index) => (
+                renderItem={(item, index) => (                 
                   <List.Item key={item.sku}>
-                    <Image
-                      src={`./img/${item.product.sku}_1.jpg`}
-                      className="cartImg"
-                    />
-                    <div className="detail">
+                    <Col xs={5}>
+                      <Image
+                          src={`./img/${item.product.sku}_1.jpg`}
+                        />
+                    </Col>
+                    <Col xs={12} className="detail">
                       {item.product.title}
                       <br />
                       <span>
@@ -101,8 +114,8 @@ const Cart = ({ cart, dispatch }) => {
                       </span>
                       <br />
                       <span>quantity: {item.quantity}</span>
-                    </div>
-                    <div>
+                    </Col>
+                    <Col xs={5}>
                       <button
                         className="btnDel"
                         onClick={() => {
@@ -150,11 +163,11 @@ const Cart = ({ cart, dispatch }) => {
                           +
                         </button>
                       </p>
-                    </div>
+                    </Col>
                   </List.Item>
                 )}
               />
-            </div>
+            </Row>
           )}
         </Drawer>
       </div>

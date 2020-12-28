@@ -22,7 +22,6 @@ const Products = ({ dispatch, products,cartData }) => {
       type: "products/fetch",
       payload: {page:1},
     })
-    console.log('dispatchs');
     if(window.localStorage.data){
       dispatch({type:"cart/setStorage"})
     }
@@ -57,8 +56,8 @@ const Products = ({ dispatch, products,cartData }) => {
           </span>
           <span className="priceFloat">
             {item.price % 1 === 0
-              ? ""
-              : "." + item.price.toString().split(".")[1]}
+              ? ".00"
+              : "." + item.price.toFixed(2).toString().split(".")[1] }
           </span>
           <br />
          
@@ -88,7 +87,6 @@ const Products = ({ dispatch, products,cartData }) => {
                       block
                     >
                       {size}
-                      {console.log(item.installments,'库存')}
                     </Button>   
                   </List.Item>
                 )}
