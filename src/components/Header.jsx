@@ -40,7 +40,9 @@ const Header = ({ dispatch, products,staticData }) => {
           <SubMenu 
             title="Specified Size"
             style={{ color: "#000", fontSize: "18px" }}
-          >
+          ><Menu.Item key="setting:4" onClick={() => sortGoods("")}>
+          ALL
+        </Menu.Item>
             {sizeList.map((item) => (<Menu.Item key={item + '*'} onClick={() => sortBySize(`${item}`)} >{item}</Menu.Item>))}
           </SubMenu>
           <SubMenu
@@ -48,7 +50,7 @@ const Header = ({ dispatch, products,staticData }) => {
             style={{ color: "#000", fontSize: "18px" }}
             title="Order by"
           >
-            <Menu.Item key="setting:1" onClick={() => sortGoods("")}>
+            <Menu.Item key="setting:1" onClick={() => sortGoods("default")}>
               默认
             </Menu.Item>
             <Menu.Item key="setting:2" onClick={() => sortGoods("asc")}>

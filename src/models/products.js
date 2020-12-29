@@ -36,6 +36,8 @@ export default {
           newData = product.sort((a, b) => a["price"] - b["price"]);
         } else if (key === "desc") {
           newData = product.sort((a, b) => b["price"] - a["price"]);
+        } else if (key === "default"){
+          newData = product.sort((a, b) => b["id"] - a["id"]);
         }
         else {    
           yield put({ type: "fetch" });
